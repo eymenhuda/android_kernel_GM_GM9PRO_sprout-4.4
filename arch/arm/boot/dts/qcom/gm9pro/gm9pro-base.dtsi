@@ -4,6 +4,16 @@
 #include "gm9pro-camera-sensor-mtp.dtsi"
 #include "gm9pro-sec_ts-i2c.dtsi"
 
+/ {
+	reserved-memory {
+		ramoops_mem: ramoops_region@b0000000 {
+			compatible = "removed-dma-pool";
+			no-map;
+			reg = <0 0xA0000000 0 0x00400000>;
+		};
+	};
+};
+
 &dai_mi2s0 {
 	qcom,msm-mi2s-rx-lines = <1>;
 	qcom,msm-mi2s-tx-lines = <2>;
@@ -133,6 +143,13 @@
 
 	snd-dbmdx-mach-drv {
 		compatible = "dspg,snd-dbmdx-mach-drv";
+	};
+
+        ramoops {
+		compatible = "ramoops";
+		memory-region = <&ramoops_mem>;
+		console-size = <0x0 0x200000>;
+		pmsg-size = <0x0 0x200000>;
 	};
 };
 
