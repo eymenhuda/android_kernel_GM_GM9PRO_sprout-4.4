@@ -26,17 +26,52 @@
 };
 
 &pm660_charger {
-	qcom,usb-icl-ua = <3000000>;
-	qcom,otg-cl-ua = <1000000>;
-	qcom,fcc-max-ua = <3000000>;
-	qcom,fv-max-uv  = <4400000>;
+	qcom,usb-icl-ua = <2700000>;
+	qcom,fcc-max-ua = <2200000>;
+	qcom,fv-max-uv = <4400000>;
+	qcom,auto-recharge-soc;
+	qcom,autoadjust-vfloat;
+	qcom,thermal-mitigation = <2200000 2100000 1800000 1400000 1000000 600000 0>;
+	qcom,float-option = <1>;
+	qcom,usb_therm-vadc = <&pm660_vadc>;
+	qcom,protect-temp-by-d-work;
 };
 
 &pm660_fg {
 	qcom,fg-cutoff-voltage = <3400>;
+	qcom,fg-empty-voltage = <3000>;
 	qcom,fg-chg-term-current = <150>;
-	qcom,fg-sys-term-current = <300>;
-	qcom,fg-jeita-thresholds = <0 10 45 52>;
+	qcom,fg-sys-term-current = <(-170)>;
+	qcom,fg-jeita-thresholds = <0 10 45 55>;
+	qcom,fg-recharge-soc-thr = <98>;
+	qcom,fg-auto-recharge-soc;
+	qcom,hold-soc-while-full;
+	qcom,linearize-soc;
+};
+
+&mtp_batterydata {
+		#include "fg-gen3-batterydata-l9500atl_3800mah.dtsi"
+};
+
+&pm660_vadc{
+	chan@50 {
+		label = "usb_therm";
+		reg = <0x50>;
+		qcom,decimation = <2>;
+		qcom,pre-div-channel-scaling = <0>;
+		qcom,calibration-type = "ratiometric";
+		qcom,scale-function = <2>;
+		qcom,hw-settle-time = <2>;
+		qcom,fast-avg-setup = <0>;
+		qcom,vadc-thermal-node;
+	};
+ };
+
+ &pm660_pdphy {
+	qcom,default-sink-caps = <5000 2000>, /* 5V @ 2A */
+							 <9000 1700>, /* 9V @ 1.7A */
+							 <5000 3000>, /* 5V @ 3A */
+							 <9000 3000>; /* 9V @ 3A */
 };
 
 &pm660_haptics {
